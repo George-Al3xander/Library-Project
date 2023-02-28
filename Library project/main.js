@@ -1,91 +1,19 @@
 let library = [];
 let getBody = document.body;
 
+class Book {
+	constructor(title,author,pages,readStatus, number) {
+		this.title = title;
+		this.author = author;
+		this.pages = pages;
+		this.readStatus = readStatus;	
+		this.number = number;
+		library.push(this);	
 
-
-function Book(title,author,pages,readStatus) {
-	this.title = title;
-	this.author = author;
-	this.pages = pages;
-	this.readStatus = readStatus;
-	library.push(this);
-}
-
- 	
-
-function removeBook(bookId) {
-	let count = JSON.parse(localStorage.getItem("count"));
-	let removingBook = JSON.parse(localStorage.getItem(bookId));
-	let lastBook = JSON.parse(localStorage.getItem("book-" + count));
-	let lastBookId = ("book-" + count);
-	localStorage.removeItem(bookId);
-	localStorage.setItem(bookId ,JSON.stringify(lastBook));
-	localStorage.removeItem(lastBookId);
-	let bookDiv = document.getElementById(lastBookId);
-	bookDiv.remove();
-
-
-
-
-	localStorage.setItem("count" ,JSON.stringify(count-1));
-}
-
-
-
-function changeReadStatus (bookId,buttonId) {
-	let book = JSON.parse(localStorage.getItem(bookId));
-	let readStatusCheck = book.readStatus;
-	let buttonText = document.getElementById(buttonId);	
-
-	if(readStatusCheck=="read") {
-		book.readStatus = "unread";	
-
-		buttonText.innerHTML ="unread";
-		buttonText.style.color = "red";
-	}
-	else if(readStatusCheck=="unread") {
-		book.readStatus = "read";	
-		buttonText.innerHTML ="read";
-		buttonText.style.color = "lime";
-	}
-	localStorage.setItem(bookId ,JSON.stringify(book));
-}
-
-
-
-
-function closeForm() {
-	let formDiv = document.querySelector(".book-form");
-	let backgroundDiv = document.querySelector(".book-background");
-	formDiv.style.visibility = "hidden";
-	backgroundDiv.style.visibility = "hidden";
-
-	let formBook = document.getElementById('formBook');
-	formBook.addEventListener("submit",function(e) {
-		e.preventDefault();
-	})
-	
-
-}
-
-function showForm() {
-	let formDiv = document.querySelector(".book-form");
-	let backgroundDiv = document.querySelector(".book-background");
-	formDiv.style.visibility = "visible";
-	backgroundDiv.style.visibility = "visible";	
-}
-	
-
-
-
-
-function displayBook(title,author,pages,readStatus, number) {
-	
 		let newDiv = document.createElement("div");	
 		getBody.appendChild(newDiv);	
 		newDiv.setAttribute("class","book");
-		newDiv.setAttribute("id","book-" + number);
-		
+		newDiv.setAttribute("id","book-" + number);		
 
 		//Title signin
 		let bookTitle = title;	
@@ -94,10 +22,9 @@ function displayBook(title,author,pages,readStatus, number) {
 		let titleSpan = document.createElement("span");
 		let fullTitleSpan = document.createTextNode(bookTitle);	
 		titleSpan.appendChild(fullTitleSpan);		
-		let fullTitle = document.createTextNode("Tittle: " );		
+		let fullTitle = document.createTextNode("Tittle: ");		
 		newTitle.appendChild(fullTitle);
-		newTitle.appendChild(titleSpan);	
-
+		newTitle.appendChild(titleSpan);
 
 		//Author signin
 		let bookAuthor = author;	
@@ -105,7 +32,6 @@ function displayBook(title,author,pages,readStatus, number) {
 		newDiv.appendChild(newAuthor);			
 		let fullAuthor = document.createTextNode("By " + bookAuthor );		
 		newAuthor.appendChild(fullAuthor);
-
 
 		//Pages signin
 		let bookPages = pages;	
@@ -118,10 +44,7 @@ function displayBook(title,author,pages,readStatus, number) {
 		newPages.appendChild(fullPages);
 		newPages.appendChild(pagesSpan);
 
-
-
 		//Read status button
-
 		let bookReadStatus = readStatus;
 		let newReadButton = document.createElement("button");
 		newReadButton.setAttribute('onclick','changeReadStatus("book-'+number+'","button-' + number +'")');
@@ -143,21 +66,65 @@ function displayBook(title,author,pages,readStatus, number) {
 		}		
 		newReadButton.appendChild(fullReadButton);
 
-
-
-		//Remove button
-		
+		//Remove button		
 		let newRemoveButton = document.createElement("button");
 		newRemoveButton.setAttribute('onclick','removeBook("book-'+number+'")');		
 		let fullRemoveButton =document.createTextNode("remove");
 		newRemoveButton.appendChild(fullRemoveButton);
-		buttonDiv.appendChild(newRemoveButton);
-		
-
-
+		buttonDiv.appendChild(newRemoveButton);	
+			
+	}	
 }
-	
 
+function removeBook(bookId) {		
+	let count = JSON.parse(localStorage.getItem("count"));	
+	let lastBook = JSON.parse(localStorage.getItem("book-" + count));
+	let lastBookId = ("book-" + count);
+	localStorage.removeItem(bookId);
+	localStorage.setItem(bookId ,JSON.stringify(lastBook));
+	localStorage.removeItem(lastBookId);
+	let bookDiv = document.getElementById(lastBookId);
+	bookDiv.remove();
+	localStorage.setItem("count" ,JSON.stringify(count-1));
+}
+
+function changeReadStatus (bookId,buttonId) {	
+	let book = JSON.parse(localStorage.getItem(bookId));
+	let readStatusCheck = book.readStatus;
+	let buttonText = document.getElementById(buttonId);	
+
+	if(readStatusCheck=="read") {
+		book.readStatus = "unread";	
+
+		buttonText.innerHTML ="unread";
+		buttonText.style.color = "red";
+	}
+	else if(readStatusCheck=="unread") {
+		book.readStatus = "read";	
+		buttonText.innerHTML ="read";
+		buttonText.style.color = "lime";
+	}
+	localStorage.setItem(bookId ,JSON.stringify(book));
+}
+
+function closeForm() {
+	let formDiv = document.querySelector(".book-form");
+	let backgroundDiv = document.querySelector(".book-background");
+	formDiv.style.visibility = "hidden";
+	backgroundDiv.style.visibility = "hidden";
+
+	let formBook = document.getElementById('formBook');
+	formBook.addEventListener("submit",function(e) {
+		e.preventDefault();
+	})
+}
+
+function showForm() {
+	let formDiv = document.querySelector(".book-form");
+	let backgroundDiv = document.querySelector(".book-background");
+	formDiv.style.visibility = "visible";
+	backgroundDiv.style.visibility = "visible";	
+}
 
 function addNewBook() {
 	let count = JSON.parse(localStorage.getItem("count"));
@@ -167,7 +134,6 @@ function addNewBook() {
 	let bookReadStatus;	
 	let yes = document.getElementById("yes");
 	let no = document.getElementById("no");
-	
 
 	if(yes.checked) {
 		bookReadStatus = "read";
@@ -175,37 +141,28 @@ function addNewBook() {
 		bookReadStatus = "unread";	
 	}
 
-
-
 	let formBook = document.getElementById('formBook');
 	formBook.addEventListener("submit",function(e) {
 		e.preventDefault();
 	})	
 	
 	localStorage.setItem("book-" + (count+1),JSON.stringify(new Book(bookTitle,bookAuthor,bookPages,bookReadStatus)));
-	localStorage.setItem("count" ,JSON.stringify(count+1));
-	
-	displayBook(bookTitle,bookAuthor,bookPages,bookReadStatus,(count+1));
-	
-	alert("Book added!");	
-	
-	formBook.reset();
-	
+	localStorage.setItem("count" ,JSON.stringify(count+1));			
+	alert("Book added!");		
+	formBook.reset();	
 	closeForm();
 }
 
-
-
-
-
-	let libraryStorage;
+(function() {
+	let storageItem;
 	let count = JSON.parse(localStorage.getItem("count"));
-for(let i=1;i<=count;i++) {
-		let libraryStorage = JSON.parse(localStorage.getItem("book-" + i));
-
-		new Book(libraryStorage.title,libraryStorage.author,libraryStorage.pages,libraryStorage.readStatus);
+	for(let i=1;i<=count;i++) {
+	let storageItem = JSON.parse(localStorage.getItem(("book-" + i)));		
+	  new Book(storageItem.title,storageItem.author,storageItem.pages,storageItem.readStatus,i);
 	}
+})();
 	
-for(let i =0;i<library.length;i++) {
-	displayBook(library[i].title,library[i].author, library[i].pages,library[i].readStatus,(i+1));
-}
+	
+
+	
+	
